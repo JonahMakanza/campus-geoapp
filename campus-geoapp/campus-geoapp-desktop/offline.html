@@ -1,0 +1,143 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Campus GeoApp - Offline Mode</title>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                    color: #fff;
+                    min-height: 100vh;
+                    padding: 20px;
+                }
+                .container { max-width: 1200px; margin: 0 auto; }
+                .header {
+                    background: rgba(255,255,255,0.1);
+                    padding: 20px;
+                    border-radius: 15px;
+                    margin-bottom: 30px;
+                    backdrop-filter: blur(10px);
+                }
+                h1 { font-size: 2em; margin-bottom: 10px; }
+                .offline-badge {
+                    background: #ff6b6b;
+                    display: inline-block;
+                    padding: 5px 15px;
+                    border-radius: 20px;
+                    font-size: 0.8em;
+                }
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 30px;
+                }
+                .stat-card {
+                    background: rgba(255,255,255,0.1);
+                    padding: 20px;
+                    border-radius: 15px;
+                    text-align: center;
+                }
+                .stat-number { font-size: 2.5em; font-weight: bold; color: #4ecdc4; }
+                .assets-list {
+                    background: rgba(255,255,255,0.1);
+                    border-radius: 15px;
+                    padding: 20px;
+                }
+                .asset-item {
+                    background: rgba(255,255,255,0.05);
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .asset-type {
+                    font-weight: bold;
+                    padding: 5px 10px;
+                    border-radius: 5px;
+                    font-size: 0.8em;
+                }
+                .asset-type.food { background: #ff6b6b; }
+                .asset-type.building { background: #4ecdc4; }
+                .asset-type.tree { background: #2ecc71; }
+                .asset-type.print { background: #9b59b6; }
+                .refresh-btn {
+                    background: #4ecdc4;
+                    color: #1a1a2e;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                }
+                .status { margin-top: 20px; padding: 10px; border-radius: 5px; text-align: center; }
+                .status.online { background: #2ecc71; }
+                .status.offline { background: #e74c3c; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>📍 Campus GeoApp</h1>
+                    <p>University of Zimbabwe - Asset & Infrastructure Management</p>
+                    <span class="offline-badge">⚠️ OFFLINE MODE</span>
+                </div>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card"><div class="stat-number" id="totalCount">0</div><div>Total Assets</div></div>
+                    <div class="stat-card"><div class="stat-number" id="foodCount">0</div><div>Food Outlets</div></div>
+                    <div class="stat-card"><div class="stat-number" id="buildingCount">0</div><div>Buildings</div></div>
+                    <div class="stat-card"><div class="stat-number" id="treeCount">0</div><div>Trees</div></div>
+                    <div class="stat-card"><div class="stat-number" id="printCount">0</div><div>Print Stations</div></div>
+                </div>
+                <div class="assets-list">
+                    <h3>📋 Cached Assets</h3>
+                    <div id="assetsList">Loading cached data...</div>
+                    <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
+                </div>
+                <div class="status offline" id="status">Status: Offline - Showing cached data</div>
+            </div>
+            <script>
+                async function loadCachedData() {
+                    try {
+                        const response = await fetch('http://localhost:3001/assets');
+                        const assets = await response.json();
+                        updateUI(assets);
+                        document.getElementById('status').className = 'status online';
+                        document.getElementById('status').innerHTML = '✅ Status: Online - Live data';
+                    } catch (e) {
+                        // Load from localStorage
+                        const cached = localStorage.getItem('campus_assets');
+                        if (cached) {
+                            const assets = JSON.parse(cached);
+                            updateUI(assets);
+                        }
+                    }
+                }
+                function updateUI(assets) {
+                    document.getElementById('totalCount').innerText = assets.length;
+                    document.getElementById('foodCount').innerText = assets.filter(a => a.type === 'food_outlet').length;
+                    document.getElementById('buildingCount').innerText = assets.filter(a => a.type === 'building_condition').length;
+                    document.getElementById('treeCount').innerText = assets.filter(a => a.type === 'aged_tree').length;
+                    document.getElementById('printCount').innerText = assets.filter(a => a.type === 'print_shop').length;
+                    
+                    const listHtml = assets.slice(0, 20).map(a => `
+                        <div class="asset-item">
+                            <div>${new Date(a.collected_at).toLocaleDateString()}</div>
+                            <div><span class="asset-type ${a.type === 'food_outlet' ? 'food' : a.type === 'building_condition' ? 'building' : a.type === 'aged_tree' ? 'tree' : 'print'}">${a.type}</span></div>
+                            <div>${a.latitude.toFixed(4)}, ${a.longitude.toFixed(4)}</div>
+                            <div>Condition: ${a.condition || 'N/A'}</div>
+                        </div>
+                    `).join('');
+                    document.getElementById('assetsList').innerHTML = listHtml || 'No cached assets';
+                }
+                loadCachedData();
+                setInterval(loadCachedData, 30000);
+            </script>
+        </body>
+        </html>
+        

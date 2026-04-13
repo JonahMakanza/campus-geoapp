@@ -1,0 +1,57 @@
+# Render Blueprint - Complete Campus GeoApp Infrastructure
+# Deploy with: https://render.com/docs/blueprint-spec
+
+services:
+  # API Server - Node.js backend
+  - type: web
+    name: campus-geoapp-api
+    runtime: node
+    repo: https://github.com/YOUR_USERNAME/campus-geoapp  # Change this!
+    plan: free
+    buildCommand: cd campus-geoapp-server && npm install
+    startCommand: cd campus-geoapp-server && node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18.17.0
+      - key: DB_HOST
+        fromDatabase:
+          name: campus-geoapp-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: campus-geoapp-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: campus-geoapp-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: campus-geoapp-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: campus-geoapp-db
+          property: password
+      - key: PORT
+        value: 3001
+      - key: CORS_ORIGIN
+        value: "*"
+
+  # Web Dashboard - React static site
+  - type: static
+    name: campus-geoapp-dashboard
+    runtime: static
+    repo: https://github.com/YOUR_USERNAME/campus-geoapp  # Change this!
+    buildCommand: cd campus-geoapp-web && npm install && npm run build
+    staticPublishPath: ./campus-geoapp-web/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://campus-geoapp-api.onrender.com  # Will update after deploy
+
+# PostgreSQL Database
+databases:
+  - name: campus-geoapp-db
+    plan: free
+    databaseName: uz_assets_and_infrastructure
+    postgresMajorVersion: 15

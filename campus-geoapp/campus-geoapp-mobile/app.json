@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Campus GeoApp",
+    "slug": "campus-geoapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "",
+      "resizeMode": "contain",
+      "backgroundColor": "#1D9E75"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.campus.geoapp",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We need your location to record asset coordinates.",
+        "NSCameraUsageDescription": "We need camera access to photograph building conditions.",
+        "NSPhotoLibraryUsageDescription": "We need photo library access to attach images."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "",
+        "backgroundColor": "#1D9E75"
+      },
+      "package": "com.campus.geoapp",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "favicon": ""
+    },
+    "plugins": [
+      "expo-router",
+      "expo-location",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Campus GeoApp to access your photos.",
+          "cameraPermission": "Allow Campus GeoApp to use your camera."
+        }
+      ]
+    ],
+    "scheme": "campus-geoapp",
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}

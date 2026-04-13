@@ -1,0 +1,67 @@
+{
+  "expo": {
+    "name": "CampusCollect",
+    "slug": "CampusCollect",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "",
+      "resizeMode": "contain",
+      "backgroundColor": "#1D9E75"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.campus.collect",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We need your location to record asset coordinates.",
+        "NSCameraUsageDescription": "We need camera access to photograph building conditions.",
+        "NSPhotoLibraryUsageDescription": "We need photo library access to attach images."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "",
+        "backgroundColor": "#1D9E75"
+      },
+      "package": "com.campus.collect",
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": ""
+    },
+    "plugins": [
+      "expo-router",
+      "expo-location",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow CampusCollect to access your photos.",
+          "cameraPermission": "Allow CampusCollect to use your camera."
+        }
+      ]
+    ],
+    "scheme": "campus-collect",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5c64fbef-327e-4a5e-8643-65eab5c60532"
+      }
+    }
+  }
+}

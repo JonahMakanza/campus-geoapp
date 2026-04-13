@@ -1,0 +1,45 @@
+﻿# Dependencies
+node_modules/
+**/node_modules/
+
+# Expo / React Native
+.expo/
+**/.expo/
+.expo-shared/
+**/.expo-shared/
+
+# Build outputs
+dist/
+build/
+**/build/
+**/dist/
+
+# Uploads and temp files
+uploads/
+*.log
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Environment files
+.env.local
+.env.*.local
+
+# Android/iOS native folders
+android/
+ios/
+**/android/
+**/ios/
+
+# Metro bundler
+metro-error.log
+
+# Package locks (optional - keep if you want)
+# package-lock.json
